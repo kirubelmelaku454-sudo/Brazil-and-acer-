@@ -188,7 +188,7 @@ StarData stars[27] = {
 };
 
 // ---------------------------------------------------------
-// Display
+// Disiplay
 // ---------------------------------------------------------
 void display()
 {
@@ -196,7 +196,7 @@ void display()
 
     glPushMatrix();
 
-    // Translation first
+    // Translation of first 
     glTranslatef(gTranslateX, gTranslateY, 0.0f);
 
     // Rotate and scale around center of flag (10,7)
