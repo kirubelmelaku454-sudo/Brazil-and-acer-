@@ -9,7 +9,7 @@
  *  The SVG data contains 3 sub-paths:
  *    [0]  outer body of the full word  (wound clockwise in SVG)
  *    [1]  counter hole inside 'a'      (wound counter-clockwise)
- *    [2]  counter hole inside 'e'      (wound counter-clockwise)
+ *    [2]  counter hole inside 'e'      (wo
  *
  *  All three are submitted as SEPARATE CONTOURS inside a single
  *  GLU tessellator polygon call with GLU_TESS_WINDING_ODD so
@@ -22,7 +22,7 @@
  *    g++ -o acer_logo acer_logo.cpp -lGL -lGLU -lfreeglut -lm
  *
  *  Compile (Windows / MinGW):
- *    g++ -o acer_logo acer_logo.cpp -lfreeglut -lopengl32 -lglu32 -lm
+ *    g++ -o acer_logo acer_logo.cpp -lfreeglut -lopengl32 -lglu32
  *
  *  Run:
  *    ./acer_logo
@@ -31,13 +31,13 @@
  *    +  /  =   Zoom in
  *    -         Zoom out
  *    r         Toggle rotation animation
- *    0         Reset view
+ *    0         Reset 
  *    1         Color: Red
  *    2         Color: Charcoal
  *    3         Color: Blue
  *    4         Color: Acer Green (original)
  *    q / ESC   Quit
- * ============================================================
+ * ====================================================
  */
 
 #ifdef _WIN32
