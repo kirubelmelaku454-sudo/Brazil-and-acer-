@@ -1,5 +1,5 @@
 /*
- * ============================================================
+
  *  Acer Logo - OpenGL / FreeGLUT Renderer
  *
  *  Correctly renders the Acer logo with:
@@ -14,8 +14,7 @@
  *  All three are submitted as SEPARATE CONTOURS inside a single
  *  GLU tessellator polygon call with GLU_TESS_WINDING_ODD so
  *  the inner contours are automatically subtracted (holes).
- *
- * ============================================================
+ 
  *  Compile (Linux / macOS):
  *    g++ -o acer_logo acer_logo.cpp -lGL -lGLU -lglut -lm
  *    or with FreeGLUT:
@@ -37,7 +36,7 @@
  *    3         Color: Blue
  *    4         Color: Acer Green (original)
  *    q / ESC   Quit
- * ====================================================
+
  */
 
 #ifdef _WIN32
@@ -64,36 +63,22 @@ static const int WIN_W        = 1000;
 static const int WIN_H        = 700;
 static const int BEZIER_STEPS = 48;   // curve smoothness
 
-// ============================================================
-//  2-D point
-// ============================================================
 struct Pt { double x, y; };
 
-// ============================================================
-//  Sub-path: one M...Z block stored as a sampled polyline
-// ============================================================
 struct SubPath {
     std::vector<Pt> pts;
     bool closed;
 };
 
-static std::vector<SubPath> g_paths;  // all parsed sub-paths
+static std::vector<SubPath> g_paths; 
 
-// ============================================================
-//  Global render state
-// ============================================================
 static float g_zoom     = 1.0f;
 static float g_angle    = 0.0f;
 static bool  g_rotating = false;
-
-// Active colour — Acer official lime-green #78BE20 (RGB 120,190,32)
 static float g_colorR = 120.0f / 255.0f;
 static float g_colorG = 190.0f / 255.0f;
 static float g_colorB =  32.0f / 255.0f;
 
-// ============================================================
-//  SVG path tokeniser
-// ============================================================
 struct Token { bool isCmd; char cmd; double num; };
 
 static std::vector<Token> tokenise(const std::string& d)
@@ -118,9 +103,6 @@ static std::vector<Token> tokenise(const std::string& d)
     return toks;
 }
 
-// ============================================================
-//  Bezier samplers
-// ============================================================
 static void sampleCubic(std::vector<Pt>& out,
                         Pt p0,Pt p1,Pt p2,Pt p3,int steps)
 {
@@ -145,9 +127,6 @@ static void sampleQuadratic(std::vector<Pt>& out,
     }
 }
 
-// ============================================================
-//  SVG path parser  →  fills g_paths
-// ============================================================
 static void parseSVGPath(const std::string& d)
 {
     g_paths.clear();
@@ -175,7 +154,6 @@ static void parseSVGPath(const std::string& d)
     while(i<toks.size())
     {
         if(!toks[i].isCmd){
-            // implicit repeat of last command
         } else {
             lastCmd=toks[i++].cmd;
         }
@@ -267,9 +245,6 @@ static void parseSVGPath(const std::string& d)
     }
 }
 
-// ============================================================
-//  GLU Tessellation callbacks
-// ============================================================
 static void CALLBACK tessBegin (GLenum t)  { glBegin(t); }
 static void CALLBACK tessEnd   ()          { glEnd(); }
 static void CALLBACK tessVertex(void* d)   { double* v=(double*)d; glVertex2d(v[0],v[1]); }
@@ -295,9 +270,6 @@ static void tessellateAll()
         if(sp.closed && sp.pts.size()>=3)
             closed.push_back(&sp);
     if(closed.empty()) return;
-
-    // Build vertex data arrays (GLU needs stable double[3] pointers)
-    // We keep them alive in a vector-of-vectors for the entire call.
     std::vector< std::vector< std::vector<double> > > vdata(closed.size());
     for(size_t c=0;c<closed.size();++c){
         const SubPath& sp=*closed[c];
@@ -316,12 +288,8 @@ static void tessellateAll()
     gluTessCallback(tess,GLU_TESS_ERROR,   (GLvoid(*)())tessError);
     gluTessCallback(tess,GLU_TESS_COMBINE, (GLvoid(*)())tessCombine);
 
-    // ODD winding = every other winding level is filled.
-    // Outer contour = winding 1 (filled).
-    // Inner contours wound opposite = winding 0 (hole/transparent).
     gluTessProperty(tess, GLU_TESS_WINDING_RULE, GLU_TESS_WINDING_ODD);
 
-    // One polygon — many contours
     gluTessBeginPolygon(tess, nullptr);
     for(size_t c=0;c<closed.size();++c){
         gluTessBeginContour(tess);
@@ -333,9 +301,6 @@ static void tessellateAll()
     gluDeleteTess(tess);
 }
 
-// ============================================================
-//  Bounding box
-// ============================================================
 static void getBounds(double& x0,double& y0,double& x1,double& y1)
 {
     x0=y0=1e9; x1=y1=-1e9;
@@ -346,17 +311,12 @@ static void getBounds(double& x0,double& y0,double& x1,double& y1)
         }
 }
 
-// ============================================================
-//  Draw the logo
-// ============================================================
 static void drawLogo()
 {
     glColor3f(g_colorR, g_colorG, g_colorB);
 
-    // Filled shapes (with holes carved out by multi-contour tess)
     tessellateAll();
 
-    // Any open/unclosed paths drawn as stroked lines
     for(const auto& sp:g_paths){
         if(!sp.closed){
             glLineWidth(2.0f);
@@ -366,20 +326,12 @@ static void drawLogo()
         }
     }
 }
-
-// ============================================================
-//  Transform helpers
-// ============================================================
 static void scaleLogo    (float f)        { glScalef(f,f,1.0f); }
 static void translateLogo(float x,float y){ glTranslatef(x,y,0.0f); }
 static void rotateLogo   (float a)        { glRotatef(a,0.0f,0.0f,1.0f); }
 
-// ============================================================
-//  OpenGL init
-// ============================================================
 static void init()
 {
-    // Black background — matches the reference image
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glEnable(GL_LINE_SMOOTH);
     glEnable(GL_POLYGON_SMOOTH);
@@ -390,9 +342,6 @@ static void init()
     glShadeModel(GL_SMOOTH);
 }
 
-// ============================================================
-//  Display
-// ============================================================
 static void display()
 {
     glClear(GL_COLOR_BUFFER_BIT);
@@ -419,9 +368,6 @@ static void display()
     glutSwapBuffers();
 }
 
-// ============================================================
-//  Reshape
-// ============================================================
 static void reshape(int w,int h)
 {
     if(h==0)h=1;
@@ -445,10 +391,6 @@ static void timer(int)
     }
     glutTimerFunc(16,timer,0);
 }
-
-// ============================================================
-//  Keyboard
-// ============================================================
 static void keyboard(unsigned char key,int,int)
 {
     switch(key)
@@ -458,22 +400,18 @@ static void keyboard(unsigned char key,int,int)
         case 'r': case 'R': g_rotating=!g_rotating; break;
         case '0': g_zoom=1.0f;g_angle=0.0f;g_rotating=false; break;
 
-        // 1 = Red  #E8112D
         case '1':
             g_colorR=232.0f/255.0f; g_colorG=17.0f/255.0f; g_colorB=45.0f/255.0f;
             printf("Color: Red (#E8112D)\n"); break;
 
-        // 2 = Charcoal  #36454F
         case '2':
             g_colorR=54.0f/255.0f; g_colorG=69.0f/255.0f; g_colorB=79.0f/255.0f;
             printf("Color: Charcoal (#36454F)\n"); break;
 
-        // 3 = Blue  #0078D4
         case '3':
             g_colorR=0.0f; g_colorG=120.0f/255.0f; g_colorB=212.0f/255.0f;
             printf("Color: Blue (#0078D4)\n"); break;
 
-        // 4 = Acer lime-green  #78BE20
         case '4':
             g_colorR=120.0f/255.0f; g_colorG=190.0f/255.0f; g_colorB=32.0f/255.0f;
             printf("Color: Acer Green (#78BE20)\n"); break;
@@ -568,9 +506,6 @@ static const char* SVG_PATH_DATA =
 "  0.51339,-0.16889 3.73372,-0.89091 7.1563,-1.60448 "
 "z";
 
-// ============================================================
-//  main
-// ============================================================
 int main(int argc, char* argv[])
 {
     parseSVGPath(SVG_PATH_DATA);
