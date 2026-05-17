@@ -58,21 +58,21 @@ Animated waving Brazilian flag with all official elements: green background, yel
 
 ```bash
 # Acer Logo
-g++ -o acer_logo acer_logo.cpp -lGL -lGLU -lglut -lm
+g++ -o Acer Acer.cpp -lGL -lGLU -lglut -lm
 
  # Brazil Flag
-g++ -o brazil_flag brazil_flag.cpp -lGL -lGLU -lglut -lm
+g++ -o Brazil Brazil.cpp -lGL -lGLU -lglut -lm
 
 # With FreeGLUT instead of GLUT
-g++ -o acer_logo acer_logo.cpp -lGL -lGLU -lfreeglut -lm
-g++ -o brazil_flag brazil_flag.cpp -lGL -lGLU -lfreeglut -lm
+g++ -o Acer Acer.cpp -lGL -lGLU -lfreeglut -lm
+g++ -o Brazil Brazil.cpp -lGL -lGLU -lfreeglut -lm
 ```
 
 ### Windows (MinGW)
 
 ```bash
-g++ -o acer_logo acer_logo.cpp -lfreeglut -lopengl32 -lglu32
-g++ -o brazil_flag brazil_flag.cpp -lfreeglut -lopengl32 -lglu32
+g++ -o Acer Acer.cpp -lfreeglut -lopengl32 -lglu32
+g++ -o Brazil Brazil.cpp -lfreeglut -lopengl32 -lglu32
 ```
 
 ### Dependencies
@@ -96,6 +96,6 @@ brew install freeglut
 ## Run
 
 ```bash
-./acer_logo
-./brazil_flag
+./Acer
+./Brazil
 ```
