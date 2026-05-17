@@ -41,9 +41,7 @@ void drawStar(float cx, float cy, float radius)
     glEnd();
 }
 
-// ---------------------------------------------------------
 // Helper: Mini Vector Sans-Serif Font
-// ---------------------------------------------------------
 void drawChar(char c)
 {
     switch (c)
@@ -115,10 +113,7 @@ void drawChar(char c)
             break;
     }
 }
-
-// ---------------------------------------------------------
 // Draw curved text (Thin thickness)
-// ---------------------------------------------------------
 void drawTextAlongCurve()
 {
     const char* text = "ORDEM E PROGRESSO";
@@ -166,10 +161,7 @@ void drawTextAlongCurve()
 
     glLineWidth(1.0f);
 }
-
-// ---------------------------------------------------------
 // Stars
-// ---------------------------------------------------------
 struct StarData { float x, y, r; };
 
 StarData stars[27] = {
@@ -223,7 +215,7 @@ void display()
     glVertex2f(10.0f, 12.3f + waveOffset(10.0f));
     glVertex2f(1.7f, 7.0f + waveOffset(1.7f));
     glEnd();
-
+    
     // stencil
     glEnable(GL_STENCIL_TEST);
     glStencilFunc(GL_ALWAYS, 1, 0xFF);
@@ -293,9 +285,7 @@ void timer(int value)
     glutTimerFunc(16, timer, 0);
 }
 
-// ---------------------------------------------------------
 // Keyboard Controls
-// ---------------------------------------------------------
 void keyboard(unsigned char key, int x, int y)
 {
     switch (key)
@@ -316,9 +306,7 @@ void keyboard(unsigned char key, int x, int y)
     glutPostRedisplay();
 }
 
-// ---------------------------------------------------------
 // Reshape
-// ---------------------------------------------------------
 void reshape(int w, int h)
 {
     if (h == 0) h = 1;
@@ -333,9 +321,7 @@ void reshape(int w, int h)
     glLoadIdentity();
 }
 
-// ---------------------------------------------------------
 // Init
-// ---------------------------------------------------------
 void initGL()
 {
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -347,9 +333,7 @@ void initGL()
     glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 }
 
-// ---------------------------------------------------------
 // Main
-// ---------------------------------------------------------
 int main(int argc, char** argv)
 {
     glutInit(&argc, argv);
@@ -360,12 +344,12 @@ int main(int argc, char** argv)
     glutCreateWindow("Brazil Flag - Left to Right Waving");
 
     initGL();
-
+    
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
     glutKeyboardFunc(keyboard);
     glutTimerFunc(16, timer, 0);
-
+    
     glutMainLoop();
     return 0;
 }
