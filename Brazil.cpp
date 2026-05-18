@@ -7,7 +7,7 @@
 
 // ===============================
 // Global Transformation Variables
-// ===============================
+
 float gScale = 1.0f;
 float gRotate = 0.0f;
 float gTranslateX = 0.0f;
